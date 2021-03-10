@@ -244,31 +244,31 @@ stages:
       # unset it in order to recompute using build.properties value
       unset PIPELINE_IMAGE_URL
       source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/check_vulnerabilities.sh")
-  - name: Sign Image for Validation
-    type: tester
-    test_type: customimage
-    docker_image: ibmcom/pipeline-base-image:latest
-    script: |-
+  #- name: Sign Image for Validation
+  #  type: tester
+  #  test_type: customimage
+  #  docker_image: ibmcom/pipeline-base-image:latest
+  #  script: |-
       #!/bin/bash
       # uncomment to debug the script
       # set -x
       # Sign the built image as validated
-      if [ "$VAULT_REGION" ]; then
+      #if [ "$VAULT_REGION" ]; then
         # if vault region is in the 'ibm:yp:<region>' just keep the region part
-        export VAULT_REGION=$(echo "$VAULT_REGION" | awk -F ':' '{print $NF;}')
-      fi
-      source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/image_signing/add_docker.sh")
-      source <(curl -s -S -L "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/setup_dind.sh")
+        #export VAULT_REGION=$(echo "$VAULT_REGION" | awk -F ':' '{print $NF;}')
+      #fi
+      #source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/image_signing/add_docker.sh")
+      #source <(curl -s -S -L "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/setup_dind.sh")
       # configure the container registry
-      REGISTRY_REGION=$(echo "$REGISTRY_REGION" | awk -F ':' '{print $NF;}')
-      ibmcloud cr region-set $REGISTRY_REGION
+      #REGISTRY_REGION=$(echo "$REGISTRY_REGION" | awk -F ':' '{print $NF;}')
+      #ibmcloud cr region-set $REGISTRY_REGION
       # login docker to ibm container registry
-      ibmcloud cr login
+      #ibmcloud cr login
       # Initialize the REGISTRY_URL and DOCKER_CONTENT_TRUST_SERVER
-      export REGISTRY_URL=$(ibmcloud cr info | grep -m1 -i '^Container Registry' | awk '{print $3;}')
-      export DOCKER_CONTENT_TRUST_SERVER="https://$REGISTRY_URL:4443"
+      #export REGISTRY_URL=$(ibmcloud cr info | grep -m1 -i '^Container Registry' | awk '{print $3;}')
+      #export DOCKER_CONTENT_TRUST_SERVER="https://$REGISTRY_URL:4443"
       
-      source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/image_signing/sign_image_with_vault_keys.sh")
+      #source <(curl -sSL "https://raw.githubusercontent.com/open-toolchain/commons/master/scripts/image_signing/sign_image_with_vault_keys.sh")
 - name: DEPLOY
   inputs:
   - type: job
